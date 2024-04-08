@@ -8,19 +8,20 @@
 import SwiftUI
 
 struct ListView: View {
-    
-    
-    @State var items: [ItemModel] = [
-        ItemModel(title: "This is the first title!", isCompleted: false),
-        ItemModel(title: "This is the second!", isCompleted: false),
-        ItemModel(title: "Third", isCompleted: true)
-    ]
+    @EnvironmentObject var listViewModel: ListViewModel
 
     var body: some View {
         List {
-            ForEach(items) { item in
+            ForEach(listViewModel.items) { item in
                 ListRowView(item: item)
+                    .onTapGesture {
+                        withAnimation(.linear) {
+                            listViewModel.updateItem(item: item)
+                        }
+                    }
             }
+            .onDelete(perform: listViewModel.deleteItem)
+            .onMove(perform: listViewModel.moveItem)
         }
         .navigationTitle("Todo List")
         .navigationBarItems(leading: EditButton(),
@@ -34,4 +35,5 @@ struct ListView: View {
     NavigationView {
         ListView()
     }
+    .environmentObject(ListViewModel())
 }
