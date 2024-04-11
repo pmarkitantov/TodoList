@@ -13,16 +13,8 @@ struct ListView: View {
     var body: some View {
         Group {
             if listViewModel.items.isEmpty {
-                VStack(alignment: .center, spacing: 8) {
-                    Text("Your list is empty")
-                        .fontWeight(.semibold)
-
-                    Text("Tap Add to insert your first todo item")
-                        .foregroundColor(.secondary)
-                }
-                .padding()
-                .multilineTextAlignment(.center)
-
+                NoItemsView()
+                    .transition(AnyTransition.opacity.animation(.easeIn))
             } else {
                 List {
                     ForEach(listViewModel.items) { item in
@@ -33,7 +25,7 @@ struct ListView: View {
                                 }
                             }
                     }
-                    .onDelete(perform: listViewModel.deleteItem)
+                    .onDelete(perform: listViewModel.deleteItem) 
                     .onMove(perform: listViewModel.moveItem)
                 }
                 .listStyle(.plain)
